@@ -31,6 +31,16 @@ export class PokemonService {
       catchError(error => this.handleError(error, null))
     );
   }
+  
+  searchPokemonList(term: string): Observable<Pokemon[]> {
+    if(term.length <=1){
+      return of([]);
+    }
+    return this.http.get<Pokemon[]>(`api/pokemons/?name=${term}`).pipe(
+      tap((response) => this.log(response)),
+      catchError(error => this.handleError(error, []))
+    );
+  }
 
   deletePokemon(pokemonId: number) : Observable<null>{
     return this.http.delete(`api/pokemons/${pokemonId}`).pipe(
